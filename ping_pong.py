@@ -42,8 +42,12 @@ class Ball(GameSprite):
             self.speed_y *= -1
         if ball.rect.colliderect(rocket_l.rect) or ball.rect.colliderect(rocket_r.rect):
             self.speed_x *= -1
-            self.speed_y *= -1
-        
+            self.speed_y *= 1
+
+
+font.init()  
+f = font.SysFont('Arial', 33)
+rpl_score = ()      
 
 rocket_l = Player('rocket.png', 40, 90, 5, 30, 0, 5)  
 rocket_r = Player('rocket.png', 40, 90, 655, 30, 0, 5)
@@ -51,8 +55,12 @@ ball = Ball('ball.png', 20, 20, 250, 300, 3, 4)
 game = True
 FPS = 60
 clock = time.Clock()
+score_r = 0
+score_l = 0
 
-
+font.init()  
+f = font.SysFont('Arial', 33)
+ 
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -62,7 +70,21 @@ while game:
     rocket_r.update_r()
     ball.update()
 
+    rpl_score = f.render(str(score_r), True, [255, 255, 255])
+    lpl_score = f.render(str(score_l), True, [255, 255, 255])
+
     window.fill([240, 250, 235])
+    window.blit(rpl_score,(20, 40))
+    window.blit(lpl_score,(680, 40))
+
+
+
+    if ball.rect.x <= -100:
+        score_r += 1
+        ball.rect.x = 350
+    elif ball.rect.x >= 800:
+        score_l += 1
+        ball.rect.x = 350
 
     rocket_l.reset()
     rocket_r.reset()
