@@ -46,7 +46,7 @@ class Ball(GameSprite):
 
 
 font.init()  
-f = font.SysFont('Arial', 33)
+f = font.SysFont('Arial', 50)
 rpl_score = ()      
 
 rocket_l = Player('rocket.png', 40, 90, 5, 30, 0, 5)  
@@ -57,43 +57,50 @@ FPS = 60
 clock = time.Clock()
 score_r = 0
 score_l = 0
+finish = False
 
 font.init()  
-f = font.SysFont('Arial', 33)
+f = font.SysFont('Arial', 50)
  
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
-
-    rocket_l.update_l()
-    rocket_r.update_r()
-    ball.update()
-
-    rpl_score = f.render(str(score_r), True, [255, 255, 255])
-    lpl_score = f.render(str(score_l), True, [255, 255, 255])
-
-    window.fill([240, 250, 235])
-    window.blit(rpl_score,(20, 40))
-    window.blit(lpl_score,(680, 40))
+            
+    if finish != True:
+        rocket_l.update_l()
+        rocket_r.update_r()
+        ball.update()
 
 
+        window.fill([240, 250, 235])
+        
 
-    if ball.rect.x <= -100:
-        score_r += 1
-        ball.rect.x = 350
-    elif ball.rect.x >= 800:
-        score_l += 1
-        ball.rect.x = 350
+        if ball.rect.x <= -80:
+            score_l += 1
+            ball.rect.x = 350
+        elif ball.rect.x >= 780:
+            score_r += 1
+            ball.rect.x = 350   
 
-    rocket_l.reset()
-    rocket_r.reset()
-    ball.reset()
+        rpl_score = f.render(str(score_r), True, [0, 0, 0])
+        lpl_score = f.render(str(score_l), True, [0, 0, 0])
+        
+        if score_l >= 3:
+            right_win = f.render('Right player win!', True, [0, 0, 0])
+            window.blit(right_win,(200, 200))
+            finish = True
+        if score_r >= 3:
+            left_win = f.render('Left player win!', True, [0, 0, 0])
+            window.blit(left_win,(200, 200))
+            finish = True
 
-
-    display.update()
-    clock.tick(FPS)
-    rocket_r.reset()
+        rocket_l.reset()
+        rocket_r.reset()
+        ball.reset()
+        
+        window.blit(rpl_score,(100, 40))
+        window.blit(lpl_score,(600, 40))
 
 
     display.update()
